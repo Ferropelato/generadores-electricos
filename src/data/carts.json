@@ -1,0 +1,24 @@
+[
+  {
+    "id": "6a73119b-e9d4-47f7-b757-475fc46f5f91",
+    "products": [
+      {
+        "product": "gen-solar-30kva",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "278bfbe2-f459-462d-a5d3-bbc4e7a4b541",
+    "products": [
+      {
+        "product": "gen-solar-30kva",
+        "quantity": 1
+      },
+      {
+        "product": "gen-diesel-30kva",
+        "quantity": 1
+      }
+    ]
+  }
+]

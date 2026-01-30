@@ -1,0 +1,250 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fb;
+  color: #1d2330;
+  line-height: 1.6;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #ffffff 0%, #f0f4ff 45%, #e7edf7 100%);
+  z-index: -1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-header {
+  background: linear-gradient(120deg, #0f4c81 0%, #1d6fa6 55%, #2787b9 100%);
+  color: #fff;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 12px 24px rgba(15, 76, 129, 0.2);
+}
+.site-header nav {
+  display: flex;
+  gap: 1rem;
+}
+.site-header a {
+  color: #fff;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+.site-header a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.hero .hero-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e6edf6;
+}
+.hero ul {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: #f4b740;
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 10px 20px rgba(244, 183, 64, 0.3);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+.info-grid article {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+  margin-bottom: 1.5rem;
+}
+.section-title p {
+  color: #6c7a89;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.featured-grid .card {
+  position: relative;
+}
+
+.featured-grid .card::after {
+  content: "Destacado";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #f4b740;
+  color: #000;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid #eef2f7;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+}
+
+.card .price {
+  font-weight: 700;
+  color: #0f4c81;
+}
+
+.card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.card button {
+  border: none;
+  background: #0f4c81;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 76, 129, 0.2);
+}
+
+.slider-title {
+  margin-top: 2rem;
+}
+
+.slider {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid #e6edf6;
+}
+
+.slider-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 1fr);
+  animation: slide 18s linear infinite;
+}
+
+.slider img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.cart-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.cart-item {
+  background: #fff;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  border: 1px solid #eef2f7;
+}
+
+.cart-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.alert {
+  background: #fff3cd;
+  color: #664d03;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.muted {
+  color: #6c7a89;
+}
+
+.site-footer {
+  background: #fff;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  color: #6c7a89;
+  border-top: 1px solid #e4e7ee;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

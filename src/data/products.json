@@ -1,0 +1,41 @@
+[
+  {
+    "id": "gen-solar-30kva",
+    "title": "Generador Solar 30 kVA",
+    "description": "Sistema híbrido solar con respaldo inteligente para hogares y comercios.",
+    "code": "SOL30KVA",
+    "price": 3850000,
+    "status": true,
+    "stock": 6,
+    "category": "solar",
+    "thumbnails": [
+      "https://www.femacba.com.ar/mods/html/fil/Model/Product/696/69380494-1.jpg.webp"
+    ]
+  },
+  {
+    "id": "gen-diesel-30kva",
+    "title": "Generador Diésel 30 kVA",
+    "description": "Generador industrial compacto, ideal para uso continuo y emergencias.",
+    "code": "DIE30KVA",
+    "price": 2450000,
+    "status": true,
+    "stock": 10,
+    "category": "industrial",
+    "thumbnails": [
+      "https://www.femacba.com.ar/mods/html/fil/Model/Product/16576/thumb_03_69380371-1-2.jpg.webp"
+    ]
+  },
+  {
+    "id": "gen-diesel-60kva",
+    "title": "Generador Diésel 60 kVA",
+    "description": "Potencia profesional con cabina insonorizada y tablero digital.",
+    "code": "DIE60KVA",
+    "price": 4200000,
+    "status": true,
+    "stock": 4,
+    "category": "industrial",
+    "thumbnails": [
+      "https://www.femacba.com.ar/mods/html/fil/Model/Product/688/69380468-1.jpg.webp"
+    ]
+  }
+]

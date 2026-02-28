@@ -21,7 +21,16 @@ router.get("/:cid", async (req, res) => {
   if (!cart) {
     return res.status(404).json({ status: "error", message: "Carrito no encontrado" });
   }
-  res.json({ status: "success", payload: cart.products });
+  const detailedProducts = await Promise.all(
+    cart.products.map(async (item) => {
+      const product = await productManager.getProductById(item.product);
+      return {
+        product: product || null,
+        quantity: item.quantity,
+      };
+    })
+  );
+  res.json({ status: "success", payload: detailedProducts });
 });
 
 router.post("/:cid/product/:pid", async (req, res) => {

@@ -1,11 +1,23 @@
 const express = require("express");
 const path = require("path");
 const ProductManager = require("../managers/ProductManager");
+const multer = require("multer");
 
 const router = express.Router();
 const manager = new ProductManager(
   path.join(__dirname, "..", "data", "products.json")
 );
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, "..", "..", "public", "uploads"));
+    },
+    filename: (req, file, cb) => {
+      const uniqueName = `${Date.now()}-${file.originalname}`;
+      cb(null, uniqueName);
+    },
+  }),
+});
 
 router.get("/", async (req, res) => {
   const products = await manager.getProducts();
@@ -20,7 +32,7 @@ router.get("/:pid", async (req, res) => {
   res.json({ status: "success", payload: product });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", upload.single("thumbnail"), async (req, res) => {
   const {
     title,
     description,
@@ -39,6 +51,15 @@ router.post("/", async (req, res) => {
     });
   }
 
+  const parsedThumbnails = Array.isArray(thumbnails)
+    ? thumbnails
+    : thumbnails
+      ? [thumbnails]
+      : [];
+  if (req.file) {
+    parsedThumbnails.unshift(`/uploads/${req.file.filename}`);
+  }
+
   const newProduct = await manager.addProduct({
     title,
     description,
@@ -47,7 +68,7 @@ router.post("/", async (req, res) => {
     status: status !== undefined ? Boolean(status) : true,
     stock: Number(stock),
     category,
-    thumbnails: Array.isArray(thumbnails) ? thumbnails : [],
+    thumbnails: parsedThumbnails,
   });
 
   res.status(201).json({ status: "success", payload: newProduct });

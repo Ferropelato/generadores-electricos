@@ -94,13 +94,9 @@ const renderCart = async () => {
     return;
   }
 
-  const productsResponse = await fetch(`${API_BASE}/products`);
-  const productsData = await productsResponse.json();
-  const products = productsData.payload || [];
-
   cartList.innerHTML = cartItems
     .map((item) => {
-      const product = products.find((p) => p.id === item.product);
+      const product = item.product;
       if (!product) return "";
       return `
         <div class="cart-item">

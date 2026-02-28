@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body data-page="{{page}}">
+    <header class="site-header">
+      <h1>Generadores Eléctricos</h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/productos">Productos</a>
+        <a href="/realtimeproducts">Productos en vivo</a>
+        <a href="/carrito" aria-label="Carrito">&#128722;</a>
+        <a href="/chat">Chat</a>
+      </nav>
+    </header>
+
+    {{{body}}}
+
+    {{#unless (eq page "chat")}}
+    <div id="chat-widget" class="chat-widget">
+      <div id="chat-panel" class="chat-panel" aria-hidden="true">
+        <div class="chat-panel-header">
+          <h3>Chat en vivo</h3>
+          <button id="chat-close" type="button" aria-label="Cerrar chat">&times;</button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <form id="chat-form" class="chat-form">
+          <input id="chat-input" type="text" placeholder="Escribí tu consulta..." autocomplete="off" required />
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+      <button id="chat-toggle" class="chat-toggle" type="button" aria-label="Abrir chat">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+    {{/unless}}
+
+    <footer class="site-footer">
+      <p>Proyecto Backend I - API de productos y carritos</p>
+    </footer>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chatWidget.js"></script>
+  </body>
+</html>

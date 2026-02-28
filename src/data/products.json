@@ -37,5 +37,16 @@
     "thumbnails": [
       "https://www.femacba.com.ar/mods/html/fil/Model/Product/688/69380468-1.jpg.webp"
     ]
+  },
+  {
+    "id": "73557bd9-dea1-4765-ab40-19e05562385c",
+    "status": true,
+    "title": "Generador 20 kVA",
+    "description": "Generador compacto, ideal para uso continuo y emergencias.",
+    "code": "GEN20KVA",
+    "price": 195000,
+    "stock": 1,
+    "category": "COMERCIAL",
+    "thumbnails": []
   }
 ]

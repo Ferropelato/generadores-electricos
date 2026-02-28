@@ -1,0 +1,22 @@
+<main class="container">
+  <section class="section-title">
+    <h2>Catálogo</h2>
+    <p>Agregá tus generadores favoritos al carrito.</p>
+  </section>
+
+  <div id="products-list" class="cards-grid">
+    {{#each products}}
+      <article class="card">
+        {{#if this.thumbnails.[0]}}
+          <img src="{{this.thumbnails.[0]}}" alt="{{this.title}}" />
+        {{/if}}
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p class="price">$ {{this.price}}</p>
+        <button data-product-id="{{this.id}}">Agregar al carrito</button>
+      </article>
+    {{/each}}
+  </div>
+</main>
+
+<script src="/js/app.js"></script>

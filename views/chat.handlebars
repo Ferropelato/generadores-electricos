@@ -1,0 +1,23 @@
+<main class="container">
+  <section class="section-title">
+    <h2>Chat en vivo</h2>
+    <p>Consultá en tiempo real con nuestro equipo técnico.</p>
+  </section>
+
+  <div class="chat-card">
+    <div id="chat-messages" class="chat-messages"></div>
+    <form id="chat-form" class="chat-form">
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Escribí tu consulta sobre generadores..."
+        autocomplete="off"
+        required
+      />
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

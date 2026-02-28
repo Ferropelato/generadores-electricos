@@ -1,0 +1,58 @@
+<main class="container">
+  <section class="section-title">
+    <h2>Productos en tiempo real</h2>
+    <p>Creá y eliminá productos. La lista se actualiza automáticamente con WebSockets.</p>
+  </section>
+
+  <div class="realtime-actions">
+    <form id="product-form" class="product-form">
+      <h3>Agregar producto</h3>
+      <div class="form-grid">
+        <label>
+          <span>Título</span>
+          <input name="title" required placeholder="Ej: Generador 20 kVA" />
+        </label>
+        <label>
+          <span>Descripción</span>
+          <input name="description" required placeholder="Breve descripción" />
+        </label>
+        <label>
+          <span>Código</span>
+          <input name="code" required placeholder="Ej: GEN20KVA" />
+        </label>
+        <label>
+          <span>Precio</span>
+          <input name="price" type="number" required placeholder="0" />
+        </label>
+        <label>
+          <span>Stock</span>
+          <input name="stock" type="number" required placeholder="0" />
+        </label>
+        <label>
+          <span>Categoría</span>
+          <input name="category" required placeholder="Ej: industrial" />
+        </label>
+      </div>
+      <button type="submit">Crear producto</button>
+    </form>
+  </div>
+
+  <div id="products-list" class="cards-grid">
+    {{#each products}}
+      <article class="card" data-product-id="{{this.id}}">
+        {{#if this.thumbnails.[0]}}
+          <img src="{{this.thumbnails.[0]}}" alt="{{this.title}}" />
+        {{else}}
+          <div class="card-placeholder">Sin imagen</div>
+        {{/if}}
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p class="price">$ {{this.price}}</p>
+        <button class="btn-delete" data-product-id="{{this.id}}">Eliminar</button>
+      </article>
+    {{/each}}
+  </div>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>

@@ -9,7 +9,7 @@ const ensureCart = async () => {
 
   const response = await fetch(`${API_BASE}/carts`, { method: "POST" });
   const data = await response.json();
-  cartId = data.payload.id;
+  cartId = data.payload._id || data.payload.id;
   setCartId(cartId);
   return cartId;
 };
@@ -23,49 +23,27 @@ const formatPrice = (value) => {
   });
 };
 
-const renderProducts = async () => {
-  const list = document.getElementById("products-list");
-  if (!list) return;
+// Delegación: botón "Agregar al carrito" (productos renderizados por servidor)
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".btn-add-cart");
+  if (!btn || btn.disabled) return;
+  const productId = btn.dataset.productId;
+  if (!productId) return;
 
-  const response = await fetch(`${API_BASE}/products`);
-  const data = await response.json();
-  const products = data.payload || [];
-
-  if (!products.length) {
-    list.innerHTML = "<p class='muted'>No hay productos cargados aún.</p>";
-    return;
-  }
-
-  list.innerHTML = products
-    .map(
-      (product) => `
-      <article class="card">
-        ${
-          product.thumbnails && product.thumbnails[0]
-            ? `<img src="${product.thumbnails[0]}" alt="${product.title}" />`
-            : ""
-        }
-        <h3>${product.title}</h3>
-        <p>${product.description}</p>
-        <p class="price">${formatPrice(product.price)}</p>
-        <button data-product-id="${product.id}">Agregar al carrito</button>
-      </article>
-    `
-    )
-    .join("");
-
-  list.querySelectorAll("button").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const productId = button.dataset.productId;
-      const cartId = await ensureCart();
-      await fetch(`${API_BASE}/carts/${cartId}/product/${productId}`, {
-        method: "POST",
-      });
-      button.textContent = "Agregado";
-      button.disabled = true;
+  e.preventDefault();
+  try {
+    const cartId = await ensureCart();
+    const res = await fetch(`${API_BASE}/carts/${cartId}/product/${productId}`, {
+      method: "POST",
     });
-  });
-};
+    if (res.ok) {
+      btn.textContent = "Agregado";
+      btn.disabled = true;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 const renderCart = async () => {
   const cartList = document.getElementById("cart-list");
@@ -79,18 +57,23 @@ const renderCart = async () => {
     status.textContent = "Tu carrito está vacío. Agregá productos desde catálogo.";
     cartList.innerHTML = "";
     if (checkoutButton) checkoutButton.disabled = true;
+    const detailLink = document.getElementById("cart-detail-link");
+    if (detailLink) detailLink.style.display = "none";
     return;
   }
 
   const cartResponse = await fetch(`${API_BASE}/carts/${cartId}`);
   const cartData = await cartResponse.json();
-  const cartItems = cartData.payload || [];
+  const cart = cartData.payload;
+  const cartItems = cart?.products || [];
 
   if (!cartItems.length) {
     status.style.display = "block";
     status.textContent = "Tu carrito está vacío. Agregá productos desde catálogo.";
     cartList.innerHTML = "";
     if (checkoutButton) checkoutButton.disabled = true;
+    const detailLink = document.getElementById("cart-detail-link");
+    if (detailLink) detailLink.style.display = "none";
     return;
   }
 
@@ -113,20 +96,25 @@ const renderCart = async () => {
   status.style.display = "none";
   status.textContent = "";
 
+  const detailLink = document.getElementById("cart-detail-link");
+  if (detailLink) {
+    detailLink.href = `/carritos/${cartId}`;
+    detailLink.style.display = "inline-block";
+  }
+
   if (checkoutButton) {
     checkoutButton.disabled = false;
-    checkoutButton.addEventListener("click", () => {
+    checkoutButton.onclick = () => {
       status.style.display = "block";
       status.textContent = "Compra confirmada. ¡Gracias por tu pedido!";
       cartList.innerHTML = "";
       localStorage.removeItem("cartId");
       checkoutButton.disabled = true;
-    });
+    };
   }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   const page = document.body.dataset.page;
-  if (page === "productos") renderProducts();
   if (page === "carrito") renderCart();
 });

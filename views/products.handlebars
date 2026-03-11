@@ -4,6 +4,31 @@
     <p>Agregá tus generadores favoritos al carrito.</p>
   </section>
 
+  <form class="products-filters" method="get" action="/productos">
+    <input type="hidden" name="limit" value="{{pagination.limit}}" />
+    <input type="search" name="query" placeholder="Buscar..." value="{{filters.query}}" />
+    <select name="category">
+      <option value="">Todas las categorías</option>
+      <option value="solar" {{#if (eq filters.category "solar")}}selected{{/if}}>Solar</option>
+      <option value="industrial" {{#if (eq filters.category "industrial")}}selected{{/if}}>Industrial</option>
+      <option value="comercial" {{#if (eq filters.category "comercial")}}selected{{/if}}>Comercial</option>
+      <option value="residencial" {{#if (eq filters.category "residencial")}}selected{{/if}}>Residencial</option>
+      <option value="portátil" {{#if (eq filters.category "portátil")}}selected{{/if}}>Portátil</option>
+      <option value="otro" {{#if (eq filters.category "otro")}}selected{{/if}}>Otro</option>
+    </select>
+    <select name="status">
+      <option value="">Todas</option>
+      <option value="true" {{#if (eq filters.status "true")}}selected{{/if}}>Disponibles</option>
+      <option value="false" {{#if (eq filters.status "false")}}selected{{/if}}>No disponibles</option>
+    </select>
+    <select name="sort">
+      <option value="">Sin ordenar</option>
+      <option value="asc" {{#if (eq filters.sort "asc")}}selected{{/if}}>Precio: menor a mayor</option>
+      <option value="desc" {{#if (eq filters.sort "desc")}}selected{{/if}}>Precio: mayor a menor</option>
+    </select>
+    <button type="submit" class="btn">Filtrar</button>
+  </form>
+
   <div id="products-list" class="cards-grid">
     {{#each products}}
       <article class="card">
@@ -13,10 +38,25 @@
         <h3>{{this.title}}</h3>
         <p>{{this.description}}</p>
         <p class="price">$ {{this.price}}</p>
-        <button data-product-id="{{this.id}}">Agregar al carrito</button>
+        <div class="product-actions">
+          <a href="/productos/{{this.id}}" class="btn btn-sm">Ver detalle</a>
+          <button class="btn btn-sm btn-add-cart" data-product-id="{{this.id}}">Agregar al carrito</button>
+        </div>
       </article>
     {{/each}}
   </div>
+
+  {{#if pagination}}
+    <nav class="pagination" aria-label="Paginación">
+      {{#if pagination.prevLink}}
+        <a href="{{pagination.prevLink}}" class="btn">« Anterior</a>
+      {{/if}}
+      <span>Página {{pagination.page}} de {{pagination.totalPages}} ({{pagination.totalDocs}} productos)</span>
+      {{#if pagination.nextLink}}
+        <a href="{{pagination.nextLink}}" class="btn">Siguiente »</a>
+      {{/if}}
+    </nav>
+  {{/if}}
 </main>
 
 <script src="/js/app.js"></script>

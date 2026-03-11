@@ -1,0 +1,73 @@
+<main class="container">
+  <section class="section-title">
+    <h2>Carrito</h2>
+    <p>Productos en tu carrito.</p>
+  </section>
+
+  {{#if cart}}
+    {{#if cart.products.length}}
+      <div class="cart-detail-list">
+        {{#each cart.products}}
+          {{#if this.product}}
+            <article class="cart-detail-item card">
+              {{#if this.product.thumbnails.[0]}}
+                <img src="{{this.product.thumbnails.[0]}}" alt="{{this.product.title}}" />
+              {{/if}}
+              <div class="cart-detail-item-info">
+                <h3>{{this.product.title}}</h3>
+                <p class="muted">Código: {{this.product.code}}</p>
+                <p class="price">$ {{this.product.price}}</p>
+                <p>Cantidad: {{this.quantity}}</p>
+                <form class="cart-detail-actions" data-cid="{{../cart._id}}" data-pid="{{this.product._id}}">
+                  <input type="number" name="quantity" value="{{this.quantity}}" min="1" max="{{this.product.stock}}" />
+                  <button type="submit" class="btn btn-sm">Actualizar</button>
+                  <button type="button" class="btn btn-sm btn-remove" data-pid="{{this.product._id}}">Quitar</button>
+                </form>
+              </div>
+            </article>
+          {{/if}}
+        {{/each}}
+      </div>
+      <div class="cart-detail-footer">
+        <a href="/productos" class="btn">Seguir comprando</a>
+      </div>
+    {{else}}
+      <p class="muted">El carrito está vacío.</p>
+      <a href="/productos" class="btn">Ir a productos</a>
+    {{/if}}
+  {{else}}
+    <p class="muted">Carrito no encontrado.</p>
+    <a href="/productos" class="btn">Ir a productos</a>
+  {{/if}}
+</main>
+
+<script src="/js/app.js"></script>
+<script>
+  (function () {
+    const cid = "{{cart._id}}";
+    if (!cid) return;
+
+    document.querySelectorAll(".cart-detail-actions").forEach((form) => {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const f = e.target;
+        const q = parseInt(f.elements?.quantity?.value ?? f.querySelector('[name="quantity"]')?.value, 10);
+        if (q < 1) return;
+        const res = await fetch("/api/carts/" + cid + "/products/" + f.dataset.pid, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: q }),
+        });
+        if (res.ok) location.reload();
+      });
+    });
+
+    document.querySelectorAll(".btn-remove").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const pid = btn.dataset.pid;
+        const res = await fetch("/api/carts/" + cid + "/products/" + pid, { method: "DELETE" });
+        if (res.ok) location.reload();
+      });
+    });
+  })();
+</script>

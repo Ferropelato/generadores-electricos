@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const renderProduct = (product) => {
     const article = document.createElement("article");
     article.className = "card";
-    article.dataset.productId = product.id;
+    article.dataset.productId = product.id || product._id;
     const thumb = product.thumbnails?.[0]
       ? `<img src="${product.thumbnails[0]}" alt="${product.title}" />`
       : '<div class="card-placeholder">Sin imagen</div>';
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <button class="btn-delete" data-product-id="${product.id}">Eliminar</button>
     `;
     const deleteBtn = article.querySelector(".btn-delete");
-    deleteBtn.addEventListener("click", () => socket.emit("product:delete", product.id));
+    deleteBtn.addEventListener("click", () => socket.emit("product:delete", product.id || product._id));
     return article;
   };
 

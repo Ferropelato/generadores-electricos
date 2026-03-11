@@ -1,20 +1,19 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const http = require("http");
 const fs = require("fs");
 const { Server } = require("socket.io");
 const { engine } = require("express-handlebars");
-const mongoose = require("mongoose");
 
+const { connectDB } = require("./src/config/database");
 const productsRouter = require("./src/routes/products.router");
 const cartsRouter = require("./src/routes/carts.router");
 const viewsRouter = require("./src/routes/views.router");
-const ProductManager = require("./src/managers/ProductManager");
+const productService = require("./src/services/product.service");
 
 const app = express();
-const productManager = new ProductManager(path.join(__dirname, "src", "data", "products.json"));
-const PORT = 8080;
-const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/generadores";
+const PORT = parseInt(process.env.PORT, 10) || 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -65,8 +64,10 @@ io.on("connection", async (socket) => {
 
   socket.on("product:create", async (product) => {
     try {
-      const newProduct = await productManager.addProduct(product);
-      io.emit("product:created", newProduct);
+      const newProduct = await productService.addProduct(product);
+      const payload = newProduct.toObject ? newProduct.toObject() : newProduct;
+      if (payload._id) payload.id = payload._id.toString();
+      io.emit("product:created", payload);
     } catch (err) {
       socket.emit("product:error", err.message);
     }
@@ -74,7 +75,7 @@ io.on("connection", async (socket) => {
 
   socket.on("product:delete", async (productId) => {
     try {
-      const deleted = await productManager.deleteProduct(productId);
+      const deleted = await productService.deleteProduct(productId);
       if (deleted) io.emit("product:deleted", productId);
     } catch (err) {
       socket.emit("product:error", err.message);
@@ -82,24 +83,26 @@ io.on("connection", async (socket) => {
   });
 });
 
-mongoose
-  .connect(MONGO_URL)
-  .then(() => console.log("MongoDB conectado"))
-  .catch((error) => console.error("Error al conectar MongoDB", error.message));
+const startServer = async () => {
+  await connectDB();
 
-const startServer = (port) => {
   httpServer
     .once("error", (err) => {
       if (err.code === "EADDRINUSE") {
-        console.log(`Puerto ${port} en uso, intentando ${port + 1}...`);
-        startServer(port + 1);
+        console.log(`Puerto ${PORT} en uso, intentando ${PORT + 1}...`);
+        httpServer.listen(PORT + 1, () => {
+          console.log(`Servidor activo en http://localhost:${PORT + 1}`);
+        });
       } else {
         throw err;
       }
     })
-    .listen(port, () => {
-      console.log(`Servidor activo en http://localhost:${port}`);
+    .listen(PORT, () => {
+      console.log(`Servidor activo en http://localhost:${PORT}`);
     });
 };
 
-startServer(PORT);
+startServer().catch((err) => {
+  console.error("Error al iniciar:", err);
+  process.exit(1);
+});
